@@ -6,7 +6,12 @@ from sys import argv  # For accessing the commandline
 # More about the libary: https://pytube.io/en/latest/
 from pytube import YouTube, Playlist
 
-
+# on_progress_callback takes 4 parameters.
+def progress_Check(stream = None, chunk = None, file_handle = None, remaining = None):
+    #Gets the percentage of the file that has been downloaded.
+    percent = (100*(file_size-remaining))/file_size
+    print("{:00.0f}% downloaded".format(percent))
+    
 def link_checking(link):
     r = requests.get(link)
     return "Video unavailable" in r.text
@@ -24,8 +29,8 @@ if link_checking(link):
     print("Video is not availale")
 else:
     try:
-
         yt = YouTube(link)
+        title= yt.title
         print("Title: ", yt.title)
         print("Views: ", yt.views)
         print("Publish data: ", yt.publish_date)
@@ -36,7 +41,6 @@ else:
         if 'y' in option or 'yes' in option or 'hmm' in option:
             yt_downloder = yt.streams.get_highest_resolution()
             yt_downloder.download(".\downloaded")
-
     # 🔜 Audio download will be added.
 
         else:
